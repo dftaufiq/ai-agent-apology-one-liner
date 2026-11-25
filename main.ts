@@ -16,6 +16,12 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 const LINE =
   'I pushed to main, then blamed the intern to cover it up. There is no intern. There never was.';
 
+// Gate: the bounty reads /output/entry.txt as one line of 1-159 chars.
+// Fail loudly here instead of shipping a line the scorer rejects.
+if (LINE.length < 1 || LINE.length > 159 || LINE.includes('\n')) {
+  throw new Error(`entry line must be 1-159 chars on one line, got ${LINE.length}`);
+}
+
 mkdirSync('/output', { recursive: true });
 writeFileSync('/output/entry.txt', LINE, 'utf8');
 console.log(`Wrote ${LINE.length} characters to /output/entry.txt`);
